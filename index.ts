@@ -1,4 +1,8 @@
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { APIGatewayProxyResult, Handler } from "aws-lambda";
 import { renderString } from "nunjucks";
 
@@ -23,11 +27,13 @@ export const handler: Handler<EventBody> = async (
   try {
     const rendered = await renderTemplate(evt);
 
+    const outputKey = await saveFile(rendered);
+
     return {
       statusCode: 200,
       body: JSON.stringify({
         message: "Lambda ran successfully!",
-        rendered,
+        outputKey,
       }),
     };
   } catch (err) {
@@ -67,4 +73,18 @@ const getTemplate = async (templateS3Key: string) => {
   const bytes = await response.Body.transformToByteArray();
 
   return new TextDecoder().decode(bytes);
+};
+
+const saveFile = async (file: string) => {
+  const key = `${new Date().toISOString()}-rendered.html`;
+
+  await client.send(
+    new PutObjectCommand({
+      Bucket: ENV_S3_BUCKET,
+      Key: key,
+      Body: file,
+    })
+  );
+
+  return key;
 };
