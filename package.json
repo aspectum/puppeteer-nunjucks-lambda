@@ -1,0 +1,22 @@
+{
+  "name": "puppeteer-nunjuck-lambda",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "puppeteer-core": "22.8.2"
+  },
+  "devDependencies": {
+    "@sparticuz/chromium": "123.0.1",
+    "@types/aws-lambda": "^8.10.141",
+    "esbuild": "^0.23.0",
+    "typescript": "^5.5.3"
+  }
+}
