@@ -3,7 +3,7 @@ require("esbuild").build({
   bundle: true,
   platform: "node",
   outfile: "dist/index.js",
-  target: "node18",
+  target: "node20",
   minify: true,
   external: ["@sparticuz/chromium"],
 });
