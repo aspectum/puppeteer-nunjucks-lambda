@@ -8,6 +8,7 @@ import { APIGatewayProxyResult, Handler } from "aws-lambda";
 import { renderString } from "nunjucks";
 import puppeteer from "puppeteer-core";
 
+// Environment variables
 const ENV_S3_BUCKET = process.env.s3_bucket;
 const ENV_S3_BUCKET_REGION = process.env.s3_bucket_region;
 

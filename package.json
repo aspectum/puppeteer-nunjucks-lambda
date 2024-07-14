@@ -1,13 +1,13 @@
 {
   "name": "puppeteer-nunjucks-lambda",
   "version": "0.0.1",
-  "description": "",
+  "description": "Node lambda to render a PDF file from a nunjucks template",
   "main": "index.js",
   "scripts": {
     "build": "node build.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "aspectum",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
