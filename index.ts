@@ -3,8 +3,10 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import chromium from "@sparticuz/chromium";
 import { APIGatewayProxyResult, Handler } from "aws-lambda";
 import { renderString } from "nunjucks";
+import puppeteer from "puppeteer-core";
 
 const ENV_S3_BUCKET = process.env.s3_bucket;
 const ENV_S3_BUCKET_REGION = process.env.s3_bucket_region;
@@ -25,9 +27,11 @@ export const handler: Handler<EventBody> = async (
   console.log("Event: ", JSON.stringify(evt));
 
   try {
-    const rendered = await renderTemplate(evt);
+    const html = await renderTemplate(evt);
 
-    const outputKey = await saveFile(rendered);
+    const buffer = await getPdfBuffer(html);
+
+    const outputKey = await saveFile(buffer);
 
     return {
       statusCode: 200,
@@ -75,8 +79,8 @@ const getTemplate = async (templateS3Key: string) => {
   return new TextDecoder().decode(bytes);
 };
 
-const saveFile = async (file: string) => {
-  const key = `${new Date().toISOString()}-rendered.html`;
+const saveFile = async (file: Buffer) => {
+  const key = `${new Date().toISOString()}.pdf`;
 
   await client.send(
     new PutObjectCommand({
@@ -87,4 +91,36 @@ const saveFile = async (file: string) => {
   );
 
   return key;
+};
+
+const getPdfBuffer = async (html: string) => {
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath(),
+    headless: chromium.headless,
+    ignoreHTTPSErrors: true,
+  });
+
+  const page = await browser.newPage();
+
+  await page.setContent(html);
+
+  const buffer = await page.pdf({
+    format: "A4",
+    printBackground: true,
+    landscape: false,
+    margin: {
+      bottom: 0,
+      left: 0,
+      right: 0,
+      top: 0,
+    },
+  });
+
+  await page.close();
+
+  await browser.close();
+
+  return buffer;
 };
