@@ -1,6 +1,6 @@
 # puppeteer-nunjucks-lambda
 
-This code creates a lambda capable of getting an html `nunjucks` template file from an `S3` bucket, rendering it with the given variables, generating a **PDF** from it with `puppeteer` and uploading the generated file back to the bucket.
+This code creates a lambda capable of getting an html [`nunjucks`](https://github.com/mozilla/nunjucks) template file from an `S3` bucket, rendering it with the given variables, generating a **PDF** from it with [`puppeteer`](https://github.com/puppeteer/puppeteer) and uploading the generated file back to the bucket.
 
 For more information, check out [@sparticuz/chromium](https://github.com/Sparticuz/chromium).
 
@@ -20,15 +20,17 @@ For more information, check out [@sparticuz/chromium](https://github.com/Spartic
 
 ## Lambda configuration
 
-1. Add a Lambda Layer of the appropriate version. Again, check out [@sparticuz/chromium](https://github.com/Sparticuz/chromium).
+1. From my tests, this worked with both the `Node.js 18.x` and `Node.js 20.x` runtimes.
 
-2. Make sure your Lambda is using the Layer.
+2. Add a Lambda Layer of the appropriate version. Again, check out [@sparticuz/chromium](https://github.com/Sparticuz/chromium).
 
-3. Add the necessary environment variables (check the code).
+3. Make sure your Lambda is using the Layer.
 
-4. Make sure the Lambda has enough memory to run chrome (start with 1024 MB and tweak from there).
+4. Add the necessary environment variables (check the code).
 
-5. Allow your lambda to download files from and upload files to an `S3` bucket. To do that, make sure your Lambda **IAM role** has a policy like
+5. Make sure the Lambda has enough memory to run chrome (start with 1024 MB and tweak from there).
+
+6. Allow your lambda to download files from and upload files to an `S3` bucket. To do that, make sure your Lambda **IAM role** has a policy like
     ```json
     {
       "Version": "2012-10-17",
