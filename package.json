@@ -3,13 +3,13 @@
   "version": "0.0.1",
   "description": "Node lambda to render a PDF file from a nunjucks template",
   "main": "index.js",
-  "scripts": {
-    "build": "node build.js"
-  },
   "keywords": [],
   "author": "aspectum",
   "license": "ISC",
   "type": "commonjs",
+  "scripts": {
+    "build": "node scripts/build.js"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.614.0",
     "nunjucks": "^3.2.4",
