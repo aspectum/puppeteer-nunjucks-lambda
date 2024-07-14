@@ -1,4 +1,4 @@
-# puppeteer-nunjack-lambda
+# puppeteer-nunjucks-lambda
 
 ## Building
 
